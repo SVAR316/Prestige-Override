@@ -1,0 +1,81 @@
+{
+  "672df12f97f0469cea52f55e": {
+    "level": 25,
+    "hideout": {
+      "8": 2,
+      "11": 1,
+      "9": 2
+    },
+    "roubles": 10000000
+  },
+  "672df4281ab8d9c8849a0c88": {
+    "level": 30,
+    "skills": {
+      "Charisma": 7,
+      "Strength": 10,
+      "Endurance": 10
+    },
+    "hideout": {
+      "8": 2,
+      "11": 1,
+      "9": 2
+    },
+    "roubles": 15000000
+  },
+  "683da91d6f472cfa738c52f2": {
+    "level": 35,
+    "skills": {
+      "Charisma": 7,
+      "Strength": 10,
+      "Endurance": 10
+    },
+    "hideout": {
+      "8": 2,
+      "11": 1,
+      "9": 2
+    },
+    "roubles": 15000000
+  },
+  "6842f121000d98ce33b9a60f": {
+    "level": 40,
+    "skills": {
+      "Charisma": 12,
+      "Strength": 15,
+      "Endurance": 15
+    },
+    "hideout": {
+      "8": 2,
+      "11": 1,
+      "9": 2
+    },
+    "roubles": 15000000
+  },
+  "68d3ddb4fc101237e601d774": {
+    "level": 47,
+    "skills": {
+      "Charisma": 20,
+      "Strength": 20,
+      "Endurance": 20
+    },
+    "hideout": {
+      "9": 3,
+      "11": 2,
+      "1": 3
+    },
+    "roubles": 20000000
+  },
+  "68d3e6f46a7ba36646713fa6": {
+    "level": 47,
+    "skills": {
+      "Charisma": 20,
+      "Strength": 20,
+      "Endurance": 20
+    },
+    "hideout": {
+      "9": 3,
+      "11": 2,
+      "1": 3
+    },
+    "roubles": 20000000
+  }
+}

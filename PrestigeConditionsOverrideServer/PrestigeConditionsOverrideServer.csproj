@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Library</OutputType>
+    <Authors>ZloyMolodoy</Authors>
+    <RootNamespace>PrestigeConditionsOverrideServer</RootNamespace>
+    <AssemblyName>PrestigeConditionsOverrideServer</AssemblyName>
+    <ProjectName>PrestigeConditionsOverrideServer</ProjectName>
+    <Description>Prestige Conditions Override Server</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>1.0.0</Version>
+    <OutputPath>bin\$(Configuration)\$(ProjectName)\$(AssemblyName)</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ReleaseOutputDir>..\Build\SPT\user\mods\com.zloymolodoy.prestigeconditionoverride\</ReleaseOutputDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SPTarkov.Common" Version="4.0.13" />
+    <PackageReference Include="SPTarkov.DI" Version="4.0.13" />
+    <PackageReference Include="SPTarkov.Server.Core" Version="4.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="db\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="CleanUnwantedFiles" AfterTargets="Build">
+    <ItemGroup>
+      <UnwantedFiles Include="$(OutputPath)*.pdb;$(OutputPath)*.deps.json;$(OutputPath)*.runtimeconfig.*" />
+    </ItemGroup>
+    <Delete Files="@(UnwantedFiles)" />
+  </Target>
+
+  <Target Name="CopyBuildOutput" AfterTargets="CleanUnwantedFiles" Condition="'$(Configuration)' == 'Release'">
+    <MakeDir Directories="$(ReleaseOutputDir)" />
+    <ItemGroup>
+      <RemainingFiles Include="$(OutputPath)**\*" />
+    </ItemGroup>
+    <Copy
+      SourceFiles="@(RemainingFiles)"
+      DestinationFiles="@(RemainingFiles->'$(ReleaseOutputDir)%(RecursiveDir)%(Filename)%(Extension)')"
+    />
+  </Target>
+</Project>
