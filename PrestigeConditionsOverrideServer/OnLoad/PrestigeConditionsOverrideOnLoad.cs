@@ -48,7 +48,7 @@ public sealed class PrestigeConditionsOverrideOnLoad(
             var prestige = prestiges.FirstOrDefault(p => string.Equals(p.Id, prestigeId, StringComparison.Ordinal));
             if (prestige is null)
             {
-                logger.Warning($"[PrestigeConditionsOverride] Prestige id not found in database: {prestigeId}");
+                // logger.Warning($"[PrestigeConditionsOverride] Prestige id not found in database: {prestigeId}");
                 continue;
             }
 
@@ -56,10 +56,10 @@ public sealed class PrestigeConditionsOverrideOnLoad(
 
             if (config.Level <= 0 && config.Roubles <= 0 && config.Skills is null && config.Hideout is null)
             {
-                logger.Warning(
-                    $"[PrestigeConditionsOverride] Empty config for prestige {prestigeId} — skipping non-quest patch (check JSON property names)"
-                );
-                continue;
+                // logger.Warning(
+                //     $"[PrestigeConditionsOverride] Empty config for prestige {prestigeId} — skipping non-quest patch (check JSON property names)"
+                // );
+                // continue;
             }
 
             if (NonQuestConditionsAlreadyMatch(prestige, config))
@@ -67,9 +67,9 @@ public sealed class PrestigeConditionsOverrideOnLoad(
                 continue;
             }
 
-            logger.Info(
-                $"[PrestigeConditionsOverride] Config for {prestigeId}: level={config.Level}, roubles={config.Roubles}, skills={config.Skills?.Count ?? 0}, hideout={config.Hideout?.Count ?? 0}"
-            );
+            // logger.Info(
+            //     $"[PrestigeConditionsOverride] Config for {prestigeId}: level={config.Level}, roubles={config.Roubles}, skills={config.Skills?.Count ?? 0}, hideout={config.Hideout?.Count ?? 0}"
+            // );
             changesApplied++;
             PatchNonQuestConditions(prestige, config);
         }
@@ -97,33 +97,33 @@ public sealed class PrestigeConditionsOverrideOnLoad(
         {
             if (config.Level <= 0)
             {
-                logger.Warning(
-                    $"[PrestigeConditionsOverride] Invalid start level for quest {questId} — skipping (level must be > 0)"
-                );
+                // logger.Warning(
+                //     $"[PrestigeConditionsOverride] Invalid start level for quest {questId} — skipping (level must be > 0)"
+                // );
                 continue;
             }
 
             if (!quests.TryGetValue(new MongoId(questId), out var quest))
             {
-                logger.Warning($"[PrestigeConditionsOverride] Quest not found in database: {questId}");
+                // logger.Warning($"[PrestigeConditionsOverride] Quest not found in database: {questId}");
                 continue;
             }
 
             var startConditions = quest.Conditions?.AvailableForStart;
             if (startConditions is null || startConditions.Count == 0)
             {
-                logger.Warning(
-                    $"[PrestigeConditionsOverride] Quest {questId} has no AvailableForStart conditions — skipping"
-                );
+                // logger.Warning(
+                //     $"[PrestigeConditionsOverride] Quest {questId} has no AvailableForStart conditions — skipping"
+                // );
                 continue;
             }
 
             var levelCondition = startConditions.FirstOrDefault(c => c.ConditionType == "Level");
             if (levelCondition is null)
             {
-                logger.Warning(
-                    $"[PrestigeConditionsOverride] Quest {questId} has no Level start condition — skipping"
-                );
+                // logger.Warning(
+                //     $"[PrestigeConditionsOverride] Quest {questId} has no Level start condition — skipping"
+                // );
                 continue;
             }
 
@@ -146,10 +146,10 @@ public sealed class PrestigeConditionsOverrideOnLoad(
             }
 
             changesApplied++;
-            logger.Info(
-                $"[PrestigeConditionsOverride] Quest {questId} start level {previousLevel} -> {config.Level}"
-                + (prestigePatched ? $", prestigeLevel=={config.PrestigeLevel!.Value}" : "")
-            );
+            // logger.Info(
+            //     $"[PrestigeConditionsOverride] Quest {questId} start level {previousLevel} -> {config.Level}"
+            //     + (prestigePatched ? $", prestigeLevel=={config.PrestigeLevel!.Value}" : "")
+            // );
         }
 
         return changesApplied;
@@ -179,9 +179,9 @@ public sealed class PrestigeConditionsOverrideOnLoad(
             {
                 prestige.Conditions.Remove(condition);
                 removed++;
-                logger.Info(
-                    $"[PrestigeConditionsOverride] Removed quest {questId} from prestige {prestige.Id} (condition {condition.Id})"
-                );
+                // logger.Info(
+                //     $"[PrestigeConditionsOverride] Removed quest {questId} from prestige {prestige.Id} (condition {condition.Id})"
+                // );
             }
         }
 
@@ -243,7 +243,7 @@ public sealed class PrestigeConditionsOverrideOnLoad(
                 c.Value = level;
                 c.CompareMethod = ">=";
             }));
-            logger.Info($"[PrestigeConditionsOverride] Added Level>={level} to prestige {prestige.Id}");
+            // logger.Info($"[PrestigeConditionsOverride] Added Level>={level} to prestige {prestige.Id}");
             return;
         }
 
@@ -262,9 +262,9 @@ public sealed class PrestigeConditionsOverrideOnLoad(
             if (skillName is null || !desired.ContainsKey(skillName))
             {
                 prestige.Conditions.Remove(condition);
-                logger.Info(
-                    $"[PrestigeConditionsOverride] Removed skill '{skillName ?? "?"}' from prestige {prestige.Id}"
-                );
+                // logger.Info(
+                //     $"[PrestigeConditionsOverride] Removed skill '{skillName ?? "?"}' from prestige {prestige.Id}"
+                // );
             }
         }
 
@@ -287,7 +287,7 @@ public sealed class PrestigeConditionsOverrideOnLoad(
                     c.Value = value;
                     c.CompareMethod = ">=";
                 }));
-                logger.Info($"[PrestigeConditionsOverride] Added Skill {skillName}>={value} to prestige {prestige.Id}");
+                // logger.Info($"[PrestigeConditionsOverride] Added Skill {skillName}>={value} to prestige {prestige.Id}");
                 continue;
             }
 
@@ -307,9 +307,9 @@ public sealed class PrestigeConditionsOverrideOnLoad(
             if (areaKey is null || !desired.ContainsKey(areaKey))
             {
                 prestige.Conditions.Remove(condition);
-                logger.Info(
-                    $"[PrestigeConditionsOverride] Removed hideout area '{areaKey ?? "?"}' from prestige {prestige.Id}"
-                );
+                // logger.Info(
+                //     $"[PrestigeConditionsOverride] Removed hideout area '{areaKey ?? "?"}' from prestige {prestige.Id}"
+                // );
             }
         }
 
@@ -317,9 +317,9 @@ public sealed class PrestigeConditionsOverrideOnLoad(
         {
             if (!int.TryParse(areaKey, out var areaTypeInt) || !Enum.IsDefined(typeof(HideoutAreas), areaTypeInt))
             {
-                logger.Warning(
-                    $"[PrestigeConditionsOverride] Unknown hideout area key '{areaKey}' for prestige {prestige.Id}"
-                );
+                // logger.Warning(
+                //     $"[PrestigeConditionsOverride] Unknown hideout area key '{areaKey}' for prestige {prestige.Id}"
+                // );
                 continue;
             }
 
@@ -342,9 +342,9 @@ public sealed class PrestigeConditionsOverrideOnLoad(
                     c.Value = value;
                     c.CompareMethod = ">=";
                 }));
-                logger.Info(
-                    $"[PrestigeConditionsOverride] Added HideoutArea {areaType}>={value} to prestige {prestige.Id}"
-                );
+                    // logger.Info(
+                    //     $"[PrestigeConditionsOverride] Added HideoutArea {areaType}>={value} to prestige {prestige.Id}"
+                    // );
                 continue;
             }
 
@@ -384,7 +384,7 @@ public sealed class PrestigeConditionsOverrideOnLoad(
                 c.OnlyFoundInRaid = false;
                 c.IsEncoded = false;
             }));
-            logger.Info($"[PrestigeConditionsOverride] Added roubles>={roubles} to prestige {prestige.Id}");
+            // logger.Info($"[PrestigeConditionsOverride] Added roubles>={roubles} to prestige {prestige.Id}");
             return;
         }
 
